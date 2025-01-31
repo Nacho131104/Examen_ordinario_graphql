@@ -103,7 +103,7 @@ export const resolvers ={
             const longitude = response.longitude;
 
             //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
-            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${latitude}&lon=${longitude}`;
+            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${response.latitude}&lon=${response.longitude}`;
             const data2 = await fetch(url2,{
                 headers:{
                     "X-API-KEY":API_KEY,
@@ -114,6 +114,10 @@ export const resolvers ={
             
             //temperatura sacada de longitud y latitud de la ciudad
             return response2.temp;
+        },
+        datetime:async(parent:RestaurantModel): Promise<string> =>{
+
         }
+
     }
 }
