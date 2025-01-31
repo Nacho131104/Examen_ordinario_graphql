@@ -17,7 +17,7 @@ await mongoClient.connect();
 console.info("Connected to MongoDB");
 
 const mongoDB = mongoClient.db("");
-
+const colleccion =  mongoDB.collection("")
 
 
 const server = new ApolloServer({
