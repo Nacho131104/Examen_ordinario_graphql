@@ -14,6 +14,12 @@ type getRestaurantArgs={
 type getRestaurantsArgs={
     name: string,
 }
+type addRestaurantArgs={
+    name: string,
+    address: string,
+    city: string,
+    number: string,
+}
 export const resolvers ={
     Query:{
         getRestaurant:async(_:unknown, args:getRestaurantArgs,ctx:context): Promise<RestaurantModel|null> =>{
@@ -29,12 +35,23 @@ export const resolvers ={
         }
     },
 
+    Mutation:{
+        addRestaurant:async(_:unknown,args:addRestaurantArgs,ctx:context):Promise<boolean> =>{
+            const {name,address,city,number}=args;
+            const numeroExistente = await ctx.restaurantsCollection.findOne({number});
+            if(numeroExistente)throw new GraphQLError("Ya existe un restaurante con este numero de telefono");
+            
+        }
+    },
+
     Restaurant:{
         id:(parent:RestaurantModel): string =>{return parent._id!.toString();},
         address:(parent:RestaurantModel):string =>{
             const direccion: string = parent.address + ", "+parent.city + ", "+parent.country;
             return direccion;
         }
+    
+
 
     }
 }
