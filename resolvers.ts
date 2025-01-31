@@ -35,7 +35,7 @@ export const resolvers ={
         },
 
         getRestaurants:async(_:unknown,args:getRestaurantsArgs,ctx:context):Promise<RestaurantModel[]|null> =>{
-            const restaurantes = await ctx.restaurantsCollection.find({city:args.name}).toArray();
+            const restaurantes = (await ctx.restaurantsCollection.find().toArray()).filter((r)=>r.city=args.name);
             if(!restaurantes)throw new GraphQLError("No se encontraron restaurantes con ese nombre");
     
             return restaurantes;
