@@ -99,9 +99,10 @@ export const resolvers ={
             })
             if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
             const response: APIcity = await data.json();
-
+            const lat = response.latitude
+            const lon = response.longitude
             //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
-            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${response.latitude}&lon=${response.longitude}`;
+            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${lat}&lon=${lon}`;
             const data2 = await fetch(url2,{
                 headers:{
                     "X-API-KEY":API_KEY,
@@ -116,9 +117,9 @@ export const resolvers ={
         datetime:async(parent:RestaurantModel): Promise<string> =>{
             const API_KEY = Deno.env.get("API_KEY");
             if(!API_KEY)throw new GraphQLError("Se necesita una api key para acceder a las apis")
-            
+            const name = parent.city
             //adquirimos la longitud y latitud de la ciudad
-            const url = `https://api.api-ninjas.com/v1/city?name=${parent.city}`
+            const url = `https://api.api-ninjas.com/v1/city?name=${name}`
             const data = await fetch(url,{
                 headers:{
                     "X-API-KEY":API_KEY,
@@ -138,9 +139,9 @@ export const resolvers ={
             })
             if(data2.status!==200)throw new GraphQLError("Error en la api ninja(timezone)");
             const response2: APItimezone= await data2.json();
-
+            const timezone = response2.timezone
             //sacamos el datetime con la api de wordltime
-            const url3 = `https://api.api-ninjas.com/v1/worldtime?timezone=${response2.timezone}`
+            const url3 = `https://api.api-ninjas.com/v1/worldtime?timezone=${timezone}`
             const data3 = await fetch(url3,{
                 headers:{
                     "X-API-KEY":API_KEY,
