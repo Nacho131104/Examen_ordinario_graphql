@@ -1,7 +1,8 @@
 import { Collection, ObjectId } from "mongodb"
 import { RestaurantModel,APIvalidatephone } from "./types.ts"
 import { GraphQLError } from "graphql";
-import { stringify } from "node:querystring";
+import { APIcity } from "./types.ts";
+import { APIweather } from "./types.ts";
 
 type context ={
     restaurantsCollection: Collection<RestaurantModel>,
@@ -57,14 +58,14 @@ export const resolvers ={
             if(data.status !==200)throw new GraphQLError("Error en la api ninja")
             const response: APIvalidatephone = await data.json();
             if(!response.is_valid)throw new GraphQLError("El numero de telefono no es valido")
-            const {insertedId} = await ctx.restaurantsCollection.insertOne({
+            const {insertedId}= await ctx.restaurantsCollection.insertOne({
                 name,
                 address,
                 city,
                 number,
                 country: response.country,
             })
-            if(insertedId)return false;
+            if(!insertedId)return false;
             return true;
         },
 
@@ -82,9 +83,37 @@ export const resolvers ={
         address:(parent:RestaurantModel):string =>{
             const direccion: string = parent.address + ", "+parent.city + ", "+parent.country;
             return direccion;
+        },
+        temp:async(parent:RestaurantModel): Promise<number> =>{
+            const API_KEY = Deno.env.get("API_KEY");
+            if(!API_KEY)throw new GraphQLError("Se necesita una api key para acceder a las apis")
+            const city = parent.city;
+            
+            //https://api.api-ninjas.com/v1/city?name= api para sacar la latitud y longitud de la ciudad
+            const url = `https://api.api-ninjas.com/v1/city?name=${parent.name}`
+            const data = await fetch(url,{
+                headers:{
+                    "X-API-KEY":API_KEY,
+                }
+            })
+            if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
+            const response: APIcity = await data.json();
+            //sacamos la longitud y latitud de la ciudad por su nombre
+            const latitude = response.latitude;
+            const longitude = response.longitude;
+
+            //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
+            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${latitude}&lon=${longitude}`;
+            const data2 = await fetch(url2,{
+                headers:{
+                    "X-API-KEY":API_KEY,
+                }
+            })
+            if(data2.status!==200)throw new GraphQLError("Error en la api ninja(weather)");
+            const response2: APIweather = await data2.json();
+            
+            //temperatura sacada de longitud y latitud de la ciudad
+            return response2.temp;
         }
-    
-
-
     }
 }
