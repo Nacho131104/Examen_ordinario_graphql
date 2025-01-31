@@ -1,6 +1,7 @@
 import { Collection, ObjectId } from "mongodb"
 import { RestaurantModel } from "./types.ts"
 import { GraphQLError } from "graphql";
+import { stringify } from "node:querystring";
 
 type context ={
     restaurantsCollection: Collection<RestaurantModel>,
@@ -29,7 +30,11 @@ export const resolvers ={
     },
 
     Restaurant:{
-        id:(parent:RestaurantModel): string =>{return parent._id!.toString();}
+        id:(parent:RestaurantModel): string =>{return parent._id!.toString();},
+        address:(parent:RestaurantModel):string =>{
+            const direccion: string = parent.address + ", "+parent.city + ", "+parent.country;
+            return direccion;
+        }
 
     }
 }
