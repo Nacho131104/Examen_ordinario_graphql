@@ -35,7 +35,7 @@ export const resolvers ={
         },
 
         getRestaurants:async(_:unknown,args:getRestaurantsArgs,ctx:context):Promise<RestaurantModel[]|null> =>{
-            const restaurantes = (await ctx.restaurantsCollection.find().toArray()).filter((r)=>r.city=args.name);
+            const restaurantes = (await ctx.restaurantsCollection.find().filter((r)=>r.city=args.name).toArray());
             if(!restaurantes)throw new GraphQLError("No se encontraron restaurantes con ese nombre");
     
             return restaurantes;
@@ -98,11 +98,11 @@ export const resolvers ={
                 }
             })
             if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
-            const response: APIcity = await data.json();
-            const lat = response.latitude
-            const lon = response.longitude
+            const response: APIcity[] = await data.json();
+            const lat = response[0].latitude
+            const lon = response[0].longitude
             //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
-            const url2 = `https://api.api-ninjas.com/v1/weather?lon=${lon}&lat=${lat}`;
+            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${lat}&lon=${lon}`;
             const data2 = await fetch(url2,{
                 headers:{
                     "X-API-KEY":API_KEY,
@@ -126,9 +126,9 @@ export const resolvers ={
                 }
             })
             if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
-            const response: APIcity = await data.json();
-            const lat = response.latitude
-            const lon = response.longitude
+            const response: APIcity[] = await data.json();
+            const lat = response[0].latitude
+            const lon = response[0].longitude
         
             //https://api.api-ninjas.com/v1/timezone?city= sacamos la timezone con la long y lat
             const url2 = `https://api.api-ninjas.com/v1/timezone?lat=${lat}&lon=${lon}`;
