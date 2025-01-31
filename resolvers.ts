@@ -7,12 +7,12 @@ type context ={
 }
 
 type getRestaurantArgs={
-    id: ObjectId,
+    id: string,
 }
 export const resolvers ={
     Query:{
         getRestaurant:async(_:unknown, args:getRestaurantArgs,ctx:context): Promise<RestaurantModel> =>{
-            const restauranteEncontrado = await ctx.restaurantsCollection.findOne({_id:args.id});
+            const restauranteEncontrado = await ctx.restaurantsCollection.findOne({_id:new ObjectId(args.id)});
             if(!restauranteEncontrado)throw new GraphQLError("Restaurante no encontrado");
             return restauranteEncontrado;
         }

@@ -7,7 +7,7 @@ export type RestaurantModel = OptionalId<{
     number: string,
     country: string,
     temperature:string,
-    time: string,
+    datetime: string,
 }>
 
 
