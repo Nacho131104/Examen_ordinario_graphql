@@ -14,7 +14,7 @@ type getRestaurantArgs={
 }
 
 type getRestaurantsArgs={
-    name: string,
+    city: string,
 }
 type addRestaurantArgs={
     name: string,
@@ -35,7 +35,7 @@ export const resolvers ={
         },
 
         getRestaurants:async(_:unknown,args:getRestaurantsArgs,ctx:context):Promise<RestaurantModel[]|null> =>{
-            const restaurantes = (await ctx.restaurantsCollection.find().map((r:RestaurantModel)=>r.city==args.name).toArray());
+            const restaurantes: RestaurantModel[] = await ctx.restaurantsCollection.find({args}).toArray()
             if(!restaurantes)throw new GraphQLError("No se encontraron restaurantes con ese nombre");
     
             return restaurantes;
