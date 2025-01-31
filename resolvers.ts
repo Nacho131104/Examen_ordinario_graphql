@@ -1,8 +1,9 @@
 import { Collection, ObjectId } from "mongodb"
-import { RestaurantModel,APIvalidatephone } from "./types.ts"
+import { RestaurantModel,APIvalidatephone, APIworldtime } from "./types.ts"
 import { GraphQLError } from "graphql";
 import { APIcity } from "./types.ts";
 import { APIweather } from "./types.ts";
+import { APItimezone } from "./types.ts";
 
 type context ={
     restaurantsCollection: Collection<RestaurantModel>,
@@ -116,6 +117,41 @@ export const resolvers ={
             return response2.temp;
         },
         datetime:async(parent:RestaurantModel): Promise<string> =>{
+            const API_KEY = Deno.env.get("API_KEY");
+            if(!API_KEY)throw new GraphQLError("Se necesita una api key para acceder a las apis")
+            
+            //adquirimos la longitud y latitud de la ciudad
+            const url = `https://api.api-ninjas.com/v1/city?name=${parent.name}`
+            const data = await fetch(url,{
+                headers:{
+                    "X-API-KEY":API_KEY,
+                }
+            })
+            if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
+            const response: APIcity = await data.json();
+
+        
+            //https://api.api-ninjas.com/v1/timezone?city= sacamos la timezone con la long y lat
+            const url2 = `https://api.api-ninjas.com/v1/timezone?lat=${response.latitude}&lon=${response.longitude}`;
+            const data2 = await fetch(url2,{
+                headers:{
+                    "X-API-KEY":API_KEY,
+                }
+            })
+            if(data2.status!==200)throw new GraphQLError("Error en la api ninja(weather)");
+            const response2: APItimezone= await data2.json();
+
+            //sacamos el datetime con la api de wordltime
+            const url3 = `https://api.api-ninjas.com/v1/worldtime?timezone=${response2.timezone}`
+            const data3 = await fetch(url3,{
+                headers:{
+                    "X-API-KEY":API_KEY,
+                }
+            })
+            if(data3.status!==200)throw new GraphQLError("Error en la api ninja(weather)");
+            const response3: APIworldtime= await data2.json();
+            return response3.datetime;
+
 
         }
 

@@ -11,14 +11,12 @@ export type RestaurantModel = OptionalId<{
 
 //https://api.api-ninjas.com/v1/city
 export type APIcity ={
-    name: string,
     latitude: number,
     longitude: number,
-    country: string
 }
 
 //https://api.api-ninjas.com/v1/worldtime
-export type APItimezone={
+export type APIworldtime={
   datetime: string,
 }
 
@@ -33,4 +31,8 @@ export type APIvalidatephone ={
     is_valid: boolean,
     country: string,
     timezones: string[],
+}
+
+export type APItimezone ={
+    timezone: string,
 }
