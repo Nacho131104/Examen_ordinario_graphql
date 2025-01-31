@@ -7,7 +7,7 @@ export type RestaurantModel = OptionalId<{
     number: string,
     country: string,
     temperature:string,
-    datetime: string,
+    time: string,
 }>
 
 
@@ -26,5 +26,5 @@ export type APItimezone={
 
 //https://api.api-ninjas.com/v1/weather
 export type APIweather ={
-    temp: number,
+    temp:number,
 }

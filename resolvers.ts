@@ -16,5 +16,10 @@ export const resolvers ={
             if(!restauranteEncontrado)throw new GraphQLError("Restaurante no encontrado");
             return restauranteEncontrado;
         }
+    },
+
+    Restaurant:{
+        id:(parent:RestaurantModel): string =>{return parent._id!.toString();}
+
     }
 }
