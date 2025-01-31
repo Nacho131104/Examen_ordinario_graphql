@@ -31,6 +31,7 @@ export const resolvers ={
         getRestaurants:async(_:unknown,args:getRestaurantsArgs,ctx:context):Promise<RestaurantModel[]|null> =>{
             const restaurantes = await ctx.restaurantsCollection.find({name:args.name}).toArray();
             if(!restaurantes)throw new GraphQLError("No se encontraron restaurantes con ese nombre");
+            console.log(restaurantes)
             return restaurantes;
         }
     },
@@ -40,7 +41,7 @@ export const resolvers ={
             const {name,address,city,number}=args;
             const numeroExistente = await ctx.restaurantsCollection.findOne({number});
             if(numeroExistente)throw new GraphQLError("Ya existe un restaurante con este numero de telefono");
-            
+
         }
     },
 
