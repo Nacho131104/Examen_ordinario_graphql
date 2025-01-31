@@ -16,7 +16,7 @@ await mongoClient.connect();
 
 console.info("Connected to MongoDB");
 
-const mongoDB = mongoClient.db("ciudades");
+const mongoDB = mongoClient.db("");
 
 
 
