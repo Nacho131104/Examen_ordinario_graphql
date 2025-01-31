@@ -11,7 +11,7 @@ type getRestaurantArgs={
 }
 export const resolvers ={
     Query:{
-        getRestaurant:async(_:unknown, args:getRestaurantArgs,ctx:context): Promise<RestaurantModel> =>{
+        getRestaurant:async(_:unknown, args:getRestaurantArgs,ctx:context): Promise<RestaurantModel|null> =>{
             const restauranteEncontrado = await ctx.restaurantsCollection.findOne({_id:new ObjectId(args.id)});
             if(!restauranteEncontrado)throw new GraphQLError("Restaurante no encontrado");
             return restauranteEncontrado;
