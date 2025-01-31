@@ -126,16 +126,17 @@ export const resolvers ={
             })
             if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
             const response: APIcity = await data.json();
-
+            const lat = response.latitude
+            const lon = response.longitude
         
             //https://api.api-ninjas.com/v1/timezone?city= sacamos la timezone con la long y lat
-            const url2 = `https://api.api-ninjas.com/v1/timezone?lat=${response.latitude}&lon=${response.longitude}`;
+            const url2 = `https://api.api-ninjas.com/v1/timezone?lat=${lat}&lon=${lon}`;
             const data2 = await fetch(url2,{
                 headers:{
                     "X-API-KEY":API_KEY,
                 }
             })
-            if(data2.status!==200)throw new GraphQLError("Error en la api ninja(weather)");
+            if(data2.status!==200)throw new GraphQLError("Error en la api ninja(timezone)");
             const response2: APItimezone= await data2.json();
 
             //sacamos el datetime con la api de wordltime
@@ -145,7 +146,7 @@ export const resolvers ={
                     "X-API-KEY":API_KEY,
                 }
             })
-            if(data3.status!==200)throw new GraphQLError("Error en la api ninja(weather)");
+            if(data3.status!==200)throw new GraphQLError("Error en la api ninja(worldtime)");
             const response3: APIworldtime= await data2.json();
             return response3.datetime;
 
