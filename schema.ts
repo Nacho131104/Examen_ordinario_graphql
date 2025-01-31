@@ -3,7 +3,7 @@
 export const schema =`#graphql
 
     type Restaurant{
-        id: ID!
+        id: String!
         name: String!
         address: String!
         number: String!
