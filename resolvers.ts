@@ -91,7 +91,7 @@ export const resolvers ={
             const city = parent.city;
             
             //https://api.api-ninjas.com/v1/city?name= api para sacar la latitud y longitud de la ciudad
-            const url = `https://api.api-ninjas.com/v1/city?name=${parent.name}`
+            const url = `https://api.api-ninjas.com/v1/city?name=${city}`
             const data = await fetch(url,{
                 headers:{
                     "X-API-KEY":API_KEY,
