@@ -99,9 +99,6 @@ export const resolvers ={
             })
             if(data.status!==200)throw new GraphQLError("Error en la api ninja(city)");
             const response: APIcity = await data.json();
-            //sacamos la longitud y latitud de la ciudad por su nombre
-            const latitude = response.latitude;
-            const longitude = response.longitude;
 
             //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
             const url2 = `https://api.api-ninjas.com/v1/weather?lat=${response.latitude}&lon=${response.longitude}`;
@@ -121,7 +118,7 @@ export const resolvers ={
             if(!API_KEY)throw new GraphQLError("Se necesita una api key para acceder a las apis")
             
             //adquirimos la longitud y latitud de la ciudad
-            const url = `https://api.api-ninjas.com/v1/city?name=${parent.name}`
+            const url = `https://api.api-ninjas.com/v1/city?name=${parent.city}`
             const data = await fetch(url,{
                 headers:{
                     "X-API-KEY":API_KEY,
