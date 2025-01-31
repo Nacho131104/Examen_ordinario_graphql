@@ -35,7 +35,7 @@ export const resolvers ={
         },
 
         getRestaurants:async(_:unknown,args:getRestaurantsArgs,ctx:context):Promise<RestaurantModel[]|null> =>{
-            const restaurantes: RestaurantModel[] = await ctx.restaurantsCollection.find({city:args.name}).toArray();
+            const restaurantes = await ctx.restaurantsCollection.find({city:args.name}).toArray();
             if(!restaurantes)throw new GraphQLError("No se encontraron restaurantes con ese nombre");
     
             return restaurantes;
@@ -102,7 +102,7 @@ export const resolvers ={
             const lat = response.latitude
             const lon = response.longitude
             //https://api.api-ninjas.com/v1/weather?city= api para sacar la temp a partir de la long y lat
-            const url2 = `https://api.api-ninjas.com/v1/weather?lat=${lat}&lon=${lon}`;
+            const url2 = `https://api.api-ninjas.com/v1/weather?lon=${lon}&lat=${lat}`;
             const data2 = await fetch(url2,{
                 headers:{
                     "X-API-KEY":API_KEY,
